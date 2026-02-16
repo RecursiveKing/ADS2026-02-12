@@ -24,7 +24,29 @@ public class FiboC {
     long fasterC(long n, int m) {
         //Интуитивно найти решение не всегда просто и
         //возможно потребуется дополнительный поиск информации
-        return -1L;
+        if (n <= 1) return n;
+        int pr = 0;
+        int cu = 1;
+        int per = 0;
+        for (int i = 0; i < 6 * m; i++) {
+            int temp = cu;
+            cu = (pr + cu) % m;
+            pr = temp;
+            if (pr == 0 && cu == 1) {
+                per = i + 1;
+                break;
+            }
+        }
+        long lessN = n % per;
+        if (lessN <= 1) return lessN;
+        long fibPr = 0;
+        long fibCu = 1;
+        for (long i = 2; i <= lessN; i++) {
+            long fibSled = (fibPr + fibCu) % m;
+            fibPr = fibCu;
+            fibCu = fibSled;
+        }
+        return fibCu;
     }
 
 
