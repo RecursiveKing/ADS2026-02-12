@@ -54,11 +54,50 @@ public class C_GetInversions {
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
         }
-        int result = 0;
+        int result = mergeSortCount(a, 0, n - 1);
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
 
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
+    }
+    private int mergeCount(int[] arr, int left, int mid, int right) {
+        int[] leftHalf = new int[mid - left + 1];
+        int[] rightHalf = new int[right - mid];
+        for (int i = 0; i < leftHalf.length; i++) {
+            leftHalf[i] = arr[left + i];
+        }
+        for (int j = 0; j < rightHalf.length; j++) {
+            rightHalf[j] = arr[mid + 1 + j];
+        }
+        int i = 0;
+        int j = 0;
+        int k = left;
+        int count = 0;
+        while (i < leftHalf.length && j < rightHalf.length) {
+            if (leftHalf[i] <= rightHalf[j]) {
+                arr[k++] = leftHalf[i++];
+            } else {
+                arr[k++] = rightHalf[j++];
+                count += (mid + 1) - (left + i);
+            }
+        }
+        while (i < leftHalf.length) {
+            arr[k++] = leftHalf[i++];
+        }
+        while (j < rightHalf.length) {
+            arr[k++] = rightHalf[j++];
+        }
+        return count;
+    }
+    private int mergeSortCount(int[] arr, int left, int right) {
+        int count = 0;
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+            count += mergeSortCount(arr, left, mid);
+            count += mergeSortCount(arr, mid + 1, right);
+            count += mergeCount(arr, left, mid, right);
+        }
+        return count;
     }
 }
